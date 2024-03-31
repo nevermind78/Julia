@@ -1,13 +1,15 @@
-FROM julia:1.6
+# Use the official Julia Docker image as a base
+FROM julia:latest
 
-# Install additional Julia packages
-RUN julia -e 'using Pkg; Pkg.add(["DataFrames", "Plots"])'
-
-# Set working directory
+# Set the working directory
 WORKDIR /app
 
-# Copy the contents of your Binder repository into the container
-COPY . .
+# Install Jupyter notebook and IJulia package
+RUN julia -e 'using Pkg; Pkg.add("IJulia")'
 
-# Set the entrypoint command to start Julia
-CMD ["julia"]
+# Expose the notebook port
+EXPOSE 8888
+
+# Start Jupyter notebook
+CMD ["julia", "-e", "using IJulia; notebook()"]
+
